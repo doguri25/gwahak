@@ -1,0 +1,41 @@
+name: Import health detectives v1.2.0
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - health_detectives_anime_v1.2.0_source.zip
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: import-health-detectives-main
+  cancel-in-progress: false
+
+jobs:
+  import:
+    if: github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      contents: write
+    steps:
+      - name: Check out main
+        uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          ref: main
+          fetch-depth: 1
+      - name: Verify and import the approved archive
+        run: python3 .github/scripts/import_game.py --stage
+      - name: Commit original game and source files
+        run: |
+          if git diff --cached --quiet; then
+            echo "The original game files are already installed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Import health detectives v1.2.0 chapters 1-6 and complete source"
+          git push origin HEAD:main
