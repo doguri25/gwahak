@@ -1,0 +1,15 @@
+{
+  "name": "health-detectives-anime",
+  "version": "1.2.0",
+  "private": true,
+  "description": "우리 학교 건강탐정단 · 승인한 애니메이션 이미지 기반 플레이판",
+  "scripts": {
+    "build": "node tools/prepare-deploy.mjs",
+    "build:source": "python3 tools/build.py",
+    "validate": "python3 tools/validate_content.py",
+    "typecheck": "tsc src/app.ts --target ES2021 --module none --lib ES2021,DOM --strict --skipLibCheck --noEmit"
+  },
+  "devDependencies": {
+    "typescript": "5.8.3"
+  }
+}
